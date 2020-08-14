@@ -30,7 +30,7 @@ public class robotT2 {
             request.setMsgtype("markdown");
             OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
             markdown.setTitle("代码审核结果");
-            markdown.setText("hahahahahah");
+            markdown.setText(result);
             request.setMarkdown(markdown);
             String stringToSign = timestamp + "\n" + secret;
             Mac mac = Mac.getInstance("HmacSHA256");
@@ -38,8 +38,9 @@ public class robotT2 {
             byte[] signData = mac.doFinal(stringToSign.getBytes("UTF-8"));
             String sign = URLEncoder.encode(new String(Base64.encodeBase64(signData)), "UTF-8");
             url = url.concat("&timestamp=" + timestamp + "&sign=" + sign);
-
-            Result<String> stringResult = HttpClientManager.getInstance().sendPostByJSON(url, JSON.toJSONString(request));
+            String s = JSON.toJSONString(request);
+            System.out.println(s);
+            Result<String> stringResult = HttpClientManager.getInstance().sendPostByJSON(url, s);
 
         } catch (Exception e) {
             e.printStackTrace();
